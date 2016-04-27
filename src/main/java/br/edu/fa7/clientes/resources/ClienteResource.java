@@ -32,11 +32,7 @@ public class ClienteResource {
 	
 	@GET
 	public List<Cliente> findAll() {
-		List<Cliente> clientes = service.findAll();
-		for(Cliente cliente : clientes) {
-			removerRefereciaCirular(cliente);;
-		}
-		return clientes;
+		return service.findAll();
 	}
 	
 	@GET
@@ -44,23 +40,9 @@ public class ClienteResource {
 	public Response find(@PathParam("id") Long id) {
 		Cliente cliente = service.find(id);
 		if (cliente != null) {
-			removerRefereciaCirular(cliente);
 			return Response.ok(cliente).build();
 		} else {
 			return Response.status(Status.NOT_FOUND).build();
-		}
-	}
-	
-	private void removerRefereciaCirular(Cliente cliente) {
-		if(cliente.getEnderecos() != null) {
-			removerReferenciaCliente(cliente.getEnderecos());
-		}
-		
-	}
-
-	private void removerReferenciaCliente(List<Endereco> enderecos) {
-		for(Endereco endereco : enderecos) {
-			endereco.setCliente(null);
 		}
 	}
 
@@ -92,9 +74,7 @@ public class ClienteResource {
 	@GET
 	@Path("{id}/enderecos")
 	public List<Endereco> findEnderecos(@PathParam ("id") Long id) {
-		List<Endereco> enderecos = service.findEnderecosByCliente(id);
-		removerReferenciaCliente(enderecos);
-		return enderecos;
+		return service.findEnderecosByCliente(id);
 	}
 	
 	@GET
@@ -102,7 +82,6 @@ public class ClienteResource {
 	public Response getEndereco(@PathParam ("id") Long id, @PathParam ("eid") Long eid) {
 		Endereco endereco = service.findEnderecoByCliente(id, eid);
 		if(endereco != null) {
-			endereco.setCliente(null);
 			return Response.ok(endereco).build();
 		} else {
 			return Response.status(Status.NOT_FOUND).build();

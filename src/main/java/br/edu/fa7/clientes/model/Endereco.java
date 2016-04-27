@@ -6,9 +6,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 @Entity
+@Table(name="endereco")
 public class Endereco implements Serializable{
 
 	private static final long serialVersionUID = -4335416492270530527L;
@@ -22,9 +23,6 @@ public class Endereco implements Serializable{
 	private String complemento;
 	
 	private String cep;
-	
-	@ManyToOne
-	private Cliente cliente;
 
 	public Long getId() {
 		return id;
@@ -56,14 +54,6 @@ public class Endereco implements Serializable{
 
 	public void setCep(String cep) {
 		this.cep = cep;
-	}
-
-	public Cliente getCliente() {
-		return cliente;
-	}
-
-	public void setCliente(Cliente cliente) {
-		this.cliente = cliente;
 	}
 	
 }

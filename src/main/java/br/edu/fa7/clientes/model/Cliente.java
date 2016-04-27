@@ -9,9 +9,12 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 @Entity
+@Table(name="cliente")
 public class Cliente implements Serializable{
 	
 	private static final long serialVersionUID = 1351114571090543262L;
@@ -26,7 +29,8 @@ public class Cliente implements Serializable{
 	
 	private String login;
 	
-	@OneToMany(fetch=FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval= true, mappedBy="cliente")
+	@OneToMany(fetch=FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval= true)
+	@JoinColumn(name="cliente_id")
 	private List<Endereco> enderecos;
 
 	public Long getId() {

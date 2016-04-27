@@ -29,22 +29,12 @@ public class ClienteService {
 
 	@Transactional
 	public void save(Cliente cliente) {
-		carregarEnderecos(cliente);
 		entityManager.persist(cliente);
-	}
-
-	private void carregarEnderecos(Cliente cliente) {
-		if(cliente.getEnderecos() != null) {
-			for(Endereco endereco : cliente.getEnderecos()) {
-				endereco.setCliente(cliente);
-			}
-		}
 	}
 
 	@Transactional
 	public void update(Long id, Cliente cliente) {
 		cliente.setId(id);
-		carregarEnderecos(cliente);
 		entityManager.merge(cliente);
 	}
 
@@ -56,13 +46,13 @@ public class ClienteService {
 
 	@SuppressWarnings("unchecked")
 	public List<Endereco> findEnderecosByCliente(Long id) {
-		Query query = entityManager.createQuery("from Endereco e where e.cliente.id=:idCliente");
+		Query query = entityManager.createQuery("select c.enderecos from Cliente c where c.id=:idCliente");
 		query.setParameter("idCliente", id);
 		return query.getResultList();
 	}
 
 	public Endereco findEnderecoByCliente(Long id, Long eid) {
-		Query query = entityManager.createQuery("from Endereco e where e.cliente.id=:idCliente and e.id=:id");
+		Query query = entityManager.createQuery("select e from Cliente c join c.enderecos e where c.id=:idCliente and e.id=:id");
 		query.setParameter("idCliente", id);
 		query.setParameter("id", eid);
 		return (Endereco) query.getSingleResult();
